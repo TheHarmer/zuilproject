@@ -3,6 +3,7 @@ import requests
 import psycopg2
 from PIL import Image, ImageTk
 
+
 conn = psycopg2.connect(
     host="localhost",
     database="stationszuil",
