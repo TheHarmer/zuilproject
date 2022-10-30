@@ -46,17 +46,17 @@ def moderatie():
         while True:
             goedkeuring = input("Bericht goedgekeurd (y/n): ")
             if goedkeuring == "y" or goedkeuring == "n":
-                with open("zuil.txt", "w") as file:
-                    for a in lines:
-                        if a != i:
-                            file.write(a)
                 break
             print("Ongelidge input")
         if goedkeuring == "y":
             goedkeuring = True
         else:
             goedkeuring = False
-
+        with open("zuil.txt", "w") as file:
+            for a in lines:
+                print(a)
+                if a != i:
+                    file.write(a)
         cursor.execute("SELECT stationid FROM station WHERE locatie = %s", [info[1]])
         stationId = cursor.fetchone()[0]
         cursor.execute("INSERT into bericht(bericht, datum, tijd, goedgekeurd, moderatorid, stationid, reiziger) VALUES(%s, %s, %s, %s, %s, %s, %s)",
@@ -64,4 +64,9 @@ def moderatie():
         conn.commit()
 
 
-moderatie()
+zuil()
+zuil()
+zuil()
+zuil()
+zuil()
+
