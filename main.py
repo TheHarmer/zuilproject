@@ -12,40 +12,56 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 def zuil():
+
+
     naam = input("Wat is uw naam: ").strip()
     if not naam:
         naam = "Anoniem"
+
     while True:
+
         bericht = input("Voer uw bericht in: ")
         if len(bericht) < 140 and len(bericht) != 0 and ";" not in bericht:
             break
         print("Ongeldig bericht")
+
     station = random.choice(["Amsterdam","Utrecht","Den Haag"])
     with open("zuil.txt","a") as file:
         file.write(f"{datetime.now().strftime('%d/%m/%Y-%H:%M:%S')};{station};{naam};{bericht}\n")
 
+
 def moderatie():
+
+
     while True:
+
         naam = input("Wat is uw naam: ")
         email = input("Wat is uw email adres: ")
+
         cursor.execute("SELECT naam, email FROM moderator WHERE email = %s", [email])
         info = cursor.fetchone()
+
         if not info:
             break
         if naam == info[0]:
             break
         print("Naam/Email incorrect")
+
     cursor.execute("INSERT INTO moderator(naam, email) VALUES(%s,%s) ON CONFLICT DO NOTHING", [naam, email])
     cursor.execute("SELECT moderatorid FROM moderator WHERE email = %s", [email])
     moderatorId = cursor.fetchone()[0]
+
     with open("zuil.txt","r+") as file:
         lines = file.readlines()
 
     lst = []
     for i in lines:
+
         info = i.strip("\n").split(";")
         print(f"{info[0]}\n{info[1]}\n{info[2]}\n{info[3]}")
+
         while True:
+
             goedkeuring = input("Bericht goedgekeurd (y/n): ")
             if goedkeuring == "stop":
                 break
@@ -53,6 +69,7 @@ def moderatie():
                 lst.append(i)
                 break
             print("Ongelidge input")
+
         if goedkeuring == "y":
             goedkeuring = True
         else:
@@ -63,11 +80,9 @@ def moderatie():
             if a not in lst:
                 file.write(a)
 
-
         cursor.execute("SELECT stationid FROM station WHERE locatie = %s", [info[1]])
         stationId = cursor.fetchone()[0]
-        cursor.execute("INSERT into bericht(bericht, datum, tijd, goedgekeurd, moderatorid, stationid, reiziger) VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                       [info[3], info[0].split("-")[0], info[0].split("-")[1], goedkeuring, moderatorId, stationId, info[2]])
+        cursor.execute("INSERT into bericht(bericht, datum, tijd, goedgekeurd, moderatorid, stationid, reiziger) VALUES(%s, %s, %s, %s, %s, %s, %s)", [info[3], info[0].split("-")[0], info[0].split("-")[1], goedkeuring, moderatorId, stationId, info[2]])
         conn.commit()
 
 
