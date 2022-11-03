@@ -20,12 +20,24 @@ class GUI():
 
         self.window = tk.Tk()
         self.window.title("Stationshalscherm")
-        self.window.geometry("1200x600")
+        self.window.geometry("1200x660")
         self.window.resizable(False, False)
 
         self.options = ["Amsterdam","Utrecht","Den Haag"]
         self.drop = tk.OptionMenu(self.window, tk.StringVar(), *self.options, command=self.test)
         self.drop.place(x=550,y=2,width=100)
+
+        self.weerframe = tk.Frame(self.window)
+
+        self.weericon = tk.Label(self.weerframe, borderwidth=1, relief="solid")
+        self.weericon.grid(rowspan=2, row=0, column=0)
+        self.temp = tk.Label(self.weerframe, text="coque",font=("Arial", 15), anchor="n", borderwidth=1, relief="solid")
+        self.humid = tk.Label(self.weerframe, text="coque2",font=("Arial", 15), anchor="n", borderwidth=1, relief="solid")
+        self.temp.grid(row=0, column=1, sticky="NESW")
+        self.humid.grid(row=2, column=1, sticky="NESW")
+
+
+        self.weerframe.pack(pady=(40,5), padx=15, anchor='w')
 
         self.frame = tk.Frame(self.window)
 
@@ -118,7 +130,7 @@ class GUI():
         self.faciliteiten3.grid(row=3, column=3, sticky="NESW")
         self.faciliteiten4.grid(row=4, column=3, sticky="NESW")
 
-        self.frame.pack(pady=50)
+        self.frame.pack(padx=10)
 
         self.window.mainloop()
 
@@ -126,6 +138,9 @@ class GUI():
 
         url = f"https://api.openweathermap.org/data/2.5/weather?q={option}&units=metric&appid=f8c6ec40fa12b97fb7772e85d0c2516c"
         r = requests.get(url=url)
+        weer = r.json()
+
+
         cursor.execute("SELECT * FROM BERICHT INNER JOIN station ON bericht.stationid = station.stationid AND goedgekeurd = true ORDER by datum DESC, tijd DESC")
         info = cursor.fetchall()
 
@@ -263,5 +278,11 @@ class GUI():
             self.faciliteiten4_2.configure(image="")
             self.faciliteiten4_3.configure(image="")
 
+        print(f"icons/{weer['weather'][0]['icon']}.png")
+
+        # self.img = ImageTk.PhotoImage(Image.open(f"icons/{weer['weather'][0]['icon']}.png"))
+        self.img = ImageTk.PhotoImage(Image.open("icons/01d.png").resize((70,70)))
+
+        self.weericon.configure(image=self.img)
 
 GUI()

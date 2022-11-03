@@ -3,13 +3,14 @@ from datetime import datetime
 import psycopg2
 
 
-conn = psycopg2.connect(
+connection = psycopg2.connect(
     host = "localhost",
     database = "stationszuil",
     user = "postgres",
     password = "123")
 
-cursor = conn.cursor()
+cursor = connection.cursor()
+
 
 def zuil():
 
@@ -38,12 +39,10 @@ def moderatie():
         naam = input("Wat is uw naam: ")
         email = input("Wat is uw email adres: ")
 
-        cursor.execute("SELECT naam, email FROM moderator WHERE email = %s", [email])
+        cursor.execute("SELECT naam FROM moderator WHERE email = %s", [email])
         info = cursor.fetchone()
 
-        if not info:
-            break
-        if naam == info[0]:
+        if not info or naam == info[0]:
             break
         print("Naam/Email incorrect")
 
@@ -51,7 +50,7 @@ def moderatie():
     cursor.execute("SELECT moderatorid FROM moderator WHERE email = %s", [email])
     moderatorId = cursor.fetchone()[0]
 
-    with open("zuil.txt","r+") as file:
+    with open("zuil.txt","r") as file:
         lines = file.readlines()
 
     lst = []
@@ -82,9 +81,9 @@ def moderatie():
 
         cursor.execute("SELECT stationid FROM station WHERE locatie = %s", [info[1]])
         stationId = cursor.fetchone()[0]
+
         cursor.execute("INSERT into bericht(bericht, datum, tijd, goedgekeurd, moderatorid, stationid, reiziger) VALUES(%s, %s, %s, %s, %s, %s, %s)", [info[3], info[0].split("-")[0], info[0].split("-")[1], goedkeuring, moderatorId, stationId, info[2]])
-        conn.commit()
+    connection.commit()
 
 
 moderatie()
-
