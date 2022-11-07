@@ -1,4 +1,3 @@
-import random
 from datetime import datetime
 import psycopg2
 
@@ -10,25 +9,6 @@ connection = psycopg2.connect(
     password = "123")
 
 cursor = connection.cursor()
-
-
-def zuil():
-
-
-    naam = input("Wat is uw naam: ").strip()
-    if not naam:
-        naam = "Anoniem"
-
-    while True:
-
-        bericht = input("Voer uw bericht in: ")
-        if len(bericht) < 140 and len(bericht) != 0 and ";" not in bericht:
-            break
-        print("Ongeldig bericht")
-
-    station = random.choice(["Amsterdam","Utrecht","Den Haag"])
-    with open("zuil.txt","a") as file:
-        file.write(f"{datetime.now().strftime('%d/%m/%Y-%H:%M:%S')};{station};{naam};{bericht}\n")
 
 
 def moderatie():
@@ -84,6 +64,3 @@ def moderatie():
 
         cursor.execute("INSERT into bericht(bericht, datum, tijd, goedgekeurd, moderatorid, stationid, reiziger) VALUES(%s, %s, %s, %s, %s, %s, %s)", [info[3], info[0].split("-")[0], info[0].split("-")[1], goedkeuring, moderatorId, stationId, info[2]])
     connection.commit()
-
-
-moderatie()
