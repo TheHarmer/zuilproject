@@ -19,141 +19,91 @@ def test(option):
     weer = r.json()
 
 
-    cursor.execute("SELECT * FROM BERICHT INNER JOIN station ON bericht.stationid = station.stationid AND goedgekeurd = true ORDER by datum DESC, tijd DESC")
+    cursor.execute("SELECT bericht.bericht, bericht.datum, bericht.tijd, station.locatie, station.ovfiets, station.lift, station.toilet, station.pr FROM bericht INNER JOIN station ON bericht.stationid = station.stationid AND goedgekeurd = true ORDER by datum DESC, tijd DESC")
     info = cursor.fetchall()
+    print(info)
 
     if len(info) > 0:
 
-        station0['text'] = info[0][8]
+        station0['text'] = info[0][3]
         bericht0['text'] = info[0][0]
 
-        if info[0][9]:
+        if info[0][4]:
             faciliteiten0_0.configure(image=img0, width=35)
-        if info[0][10]:
+        if info[0][5]:
             faciliteiten0_1.configure(image=img1, width=35)
-        if info[0][11]:
+        if info[0][6]:
             faciliteiten0_2.configure(image=img2, width=35)
-        if info[0][12]:
+        if info[0][7]:
             faciliteiten0_3.configure(image=img3, width=35)
-
-    else:
-
-        station0['text'] = ""
-        bericht0['text'] = ""
-
-        faciliteiten0_0.configure(image="")
-        faciliteiten0_1.configure(image="")
-        faciliteiten0_2.configure(image="")
-        faciliteiten0_3.configure(image="")
 
     if len(info) > 1:
 
-        station1['text'] = info[1][8]
+        station1['text'] = info[1][3]
         bericht1['text'] = info[1][0]
 
-        if info[1][9]:
+        if info[1][4]:
             faciliteiten1_0.configure(image=img0, width=35)
-        if info[1][10]:
+        if info[1][5]:
             faciliteiten1_1.configure(image=img1, width=35)
-        if info[1][11]:
+        if info[1][6]:
             faciliteiten1_2.configure(image=img2, width=35)
-        if info[1][12]:
+        if info[1][7]:
             faciliteiten1_3.configure(image=img3, width=35)
-
-    else:
-
-        station1['text'] = ""
-        bericht1['text'] = ""
-
-        faciliteiten1_0.configure(image="")
-        faciliteiten1_1.configure(image="")
-        faciliteiten1_2.configure(image="")
-        faciliteiten1_3.configure(image="")
 
     if len(info) > 2:
 
-        station2['text'] = info[2][8]
+        station2['text'] = info[2][3]
         bericht2['text'] = info[2][0]
 
-        if info[2][9]:
+        if info[2][4]:
             faciliteiten2_0.configure(image=img0, width=35)
-        if info[2][10]:
+        if info[2][5]:
             faciliteiten2_1.configure(image=img1, width=35)
-        if info[2][11]:
+        if info[2][6]:
             faciliteiten2_2.configure(image=img2, width=35)
-        if info[2][12]:
+        if info[2][7]:
             faciliteiten2_3.configure(image=img3, width=35)
-
-    else:
-
-        station2['text'] = ""
-        bericht2['text'] = ""
-
-        faciliteiten2_0.configure(image="")
-        faciliteiten2_1.configure(image="")
-        faciliteiten2_2.configure(image="")
-        faciliteiten2_3.configure(image="")
 
     if len(info) > 3:
 
-        station3['text'] = info[3][8]
+        station3['text'] = info[3][3]
         bericht3['text'] = info[3][0]
 
-        if info[3][9]:
+        if info[3][4]:
             faciliteiten3_0.configure(image=img0, width=35)
-        if info[3][10]:
+        if info[3][5]:
             faciliteiten3_1.configure(image=img1, width=35)
-        if info[3][11]:
+        if info[3][6]:
             faciliteiten3_2.configure(image=img2, width=35)
-        if info[3][12]:
+        if info[3][7]:
             faciliteiten3_3.configure(image=img3, width=35)
-
-    else:
-
-        station3['text'] = ""
-        bericht3['text'] = ""
-        faciliteiten3_0.configure(image="")
-        faciliteiten3_1.configure(image="")
-        faciliteiten3_2.configure(image="")
-        faciliteiten3_3.configure(image="")
 
     if len(info) > 4:
 
-        station4['text'] = info[4][8]
+        station4['text'] = info[4][3]
         bericht4['text'] = info[4][0]
 
-        if info[4][9]:
+        if info[4][4]:
             faciliteiten4_0.configure(image=img0, width=35)
-        if info[4][10]:
+        if info[4][5]:
             faciliteiten4_1.configure(image=img1, width=35)
-        if info[4][11]:
+        if info[4][6]:
             faciliteiten4_2.configure(image=img2, width=35)
-        if info[4][12]:
+        if info[4][7]:
             faciliteiten4_3.configure(image=img3, width=35)
 
-    else:
 
-        station4['text'] = ""
-        bericht4['text'] = ""
-
-        faciliteiten4_0.configure(image="")
-        faciliteiten4_1.configure(image="")
-        faciliteiten4_2.configure(image="")
-        faciliteiten4_3.configure(image="")
-
-    img = f"icons/{weer['weather'][0]['icon']}.png"
-
-    # img = ImageTk.PhotoImage(Image.open(f"icons/{weer['weather'][0]['icon']}.png"))
-    img = ImageTk.PhotoImage(Image.open(img).resize((70,70)))
-
-    weericon.configure(image=img)
+    temp['text'] = f"{round(weer['main']['temp'],1)}°C"
+    humid['text'] = f"humidity: {weer['main']['humidity']}%"
+    wind['text'] = f"wind speed: {weer['wind']['speed']}km"
 
 
 window = Tk()
 window.title("Stationshalscherm")
-window.geometry("1200x660")
+window.geometry("1100x600")
 window.resizable(False, False)
-window.configure(bg="Yellow")
+window.configure(bg="midnight blue")
 
 options = ["Amsterdam","Utrecht","Den Haag"]
 drop = OptionMenu(window, StringVar(), *options, command=test)
@@ -166,23 +116,21 @@ img3 = ImageTk.PhotoImage(Image.open("icons/3.png").resize((35, 35)))
 
 weerframe = Frame(window)
 
-weericon = Label(weerframe, borderwidth=1, relief="solid", bg="yellow", height=20, width=20)
-weericon.grid(rowspan=2, row=0, column=0)
-temp = Label(weerframe, text="coque",font=("Arial", 15), anchor="n", borderwidth=1, relief="solid")
-humid = Label(weerframe, text="coque2",font=("Arial", 15), anchor="n", borderwidth=1, relief="solid")
+temp = Label(weerframe, font=("Arial", 15), fg="white", anchor="n", bg="midnight blue")
+humid = Label(weerframe, font=("Arial", 15), fg="white", anchor="n", bg="midnight blue")
+wind = Label(weerframe, font=("Arial", 15), fg="white", anchor="n",  bg="midnight blue")
 temp.grid(row=0, column=1, sticky="NESW")
 humid.grid(row=1, column=1, sticky="NESW")
-
-
-weerframe.pack(pady=(40,5), padx=15, anchor='w')
+wind.grid(row=2, column=1, sticky="NESW")
+weerframe.pack(pady=(40,15), padx=15, anchor='w')
 
 frame = Frame(window)
 
-station0 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", width=12)
-station1 = Label(frame, borderwidth=1, relief="solid")
-station2 = Label(frame, borderwidth=1, relief="solid", bg="lightgray")
-station3 = Label(frame, borderwidth=1, relief="solid")
-station4 = Label(frame, borderwidth=1, relief="solid", bg="lightgray")
+station0 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", width=12, height=5)
+station1 = Label(frame, borderwidth=1, relief="solid", height=5)
+station2 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", height=5)
+station3 = Label(frame, borderwidth=1, relief="solid", height=5)
+station4 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", height=5)
 station0.grid(row=0, column=0, sticky="NESW")
 station1.grid(row=1, column=0, sticky="NESW")
 station2.grid(row=2, column=0, sticky="NESW")
@@ -256,6 +204,6 @@ faciliteiten2.grid(row=2, column=2, sticky="NESW")
 faciliteiten3.grid(row=3, column=2, sticky="NESW")
 faciliteiten4.grid(row=4, column=2, sticky="NESW")
 
-frame.pack(padx=10)
+frame.pack()
 
 window.mainloop()
