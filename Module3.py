@@ -12,22 +12,28 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 
-def test(option):
+def select(option):
 
+    drop.destroy()
+
+    # Api request voor het weer
     url = f"https://api.openweathermap.org/data/2.5/weather?q={option}&units=metric&appid=f8c6ec40fa12b97fb7772e85d0c2516c"
     r = requests.get(url=url)
     weer = r.json()
 
 
-    cursor.execute("SELECT bericht.bericht, bericht.datum, bericht.tijd, station.locatie, station.ovfiets, station.lift, station.toilet, station.pr FROM bericht INNER JOIN station ON bericht.stationid = station.stationid AND goedgekeurd = true ORDER by datum DESC, tijd DESC")
+    cursor.execute("SELECT bericht, schrijfdatum, schrijftijd, locatie, ovfiets, lift, toilet, pr FROM bericht INNER JOIN station ON bericht.stationid = station.stationid AND goedgekeurd = true ORDER by schrijfdatum DESC, schrijftijd DESC")
     info = cursor.fetchall()
     print(info)
 
+    # Al deze if statements zijn er in het geval dat er minder dan 5 berichten in de database staan
     if len(info) > 0:
 
+        # Zet het station en het bericht in de window
         station0['text'] = info[0][3]
         bericht0['text'] = info[0][0]
 
+        # Zet de fotos voor de faciliteiten in de window
         if info[0][4]:
             faciliteiten0_0.configure(image=img0, width=35)
         if info[0][5]:
@@ -99,23 +105,26 @@ def test(option):
     wind['text'] = f"wind speed: {weer['wind']['speed']}km"
 
 
+# Window aanmaken
 window = Tk()
 window.title("Stationshalscherm")
 window.geometry("1100x600")
 window.resizable(False, False)
 window.configure(bg="midnight blue")
 
+# Dropdown menu om het station te kiezen
 options = ["Amsterdam","Utrecht","Den Haag"]
-drop = OptionMenu(window, StringVar(), *options, command=test)
-drop.place(x=550,y=2,width=100)
+drop = OptionMenu(window, StringVar(), *options, command=select)
+drop.place(x=500,y=2,width=100)
 
+# Fotos voor de faciliteiten
 img0 = ImageTk.PhotoImage(Image.open("icons/0.png").resize((35, 35)))
 img1 = ImageTk.PhotoImage(Image.open("icons/1.png").resize((35, 35)))
 img2 = ImageTk.PhotoImage(Image.open("icons/2.png").resize((35, 35)))
 img3 = ImageTk.PhotoImage(Image.open("icons/3.png").resize((35, 35)))
 
+# Weerbericht
 weerframe = Frame(window)
-
 temp = Label(weerframe, font=("Arial", 15), fg="white", anchor="n", bg="midnight blue")
 humid = Label(weerframe, font=("Arial", 15), fg="white", anchor="n", bg="midnight blue")
 wind = Label(weerframe, font=("Arial", 15), fg="white", anchor="n",  bg="midnight blue")
@@ -124,8 +133,8 @@ humid.grid(row=1, column=1, sticky="NESW")
 wind.grid(row=2, column=1, sticky="NESW")
 weerframe.pack(pady=(40,15), padx=15, anchor='w')
 
+# Grid voor het bericht
 frame = Frame(window)
-
 station0 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", width=12, height=5)
 station1 = Label(frame, borderwidth=1, relief="solid", height=5)
 station2 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", height=5)
