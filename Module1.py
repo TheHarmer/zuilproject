@@ -25,6 +25,3 @@ def zuil():
     with open("zuil.csv", "a", newline='') as file:
         writer = csv.writer(file)
         writer.writerow([datetime.now().strftime('%d/%m/%Y'),datetime.now().strftime('%H:%M:%S'),station,naam,bericht])
-        # file.write(f"{datetime.now().strftime('%d/%m/%Y-%H:%M:%S')};{station};{naam};{bericht}\n")
-
-zuil()
