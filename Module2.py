@@ -15,25 +15,42 @@ cursor = connection.cursor()
 
 def moderatie():
 
-    # Loop om de moderator te krijgen
-    while True:
+    # Vragen of het een nieuwe of bestaande moderator is
+    acc = input("Nieuw of bestaande moderator? ")
 
-        naam = input("Wat is uw naam: ")
-        email = input("Wat is uw email adres: ")
+    # Info van de moderator vragen
+    naam = input("Wat is uw naam: ")
+    email = input("Wat is uw email adres: ")
+
+    # Als de moderator al bestaat
+    if acc.lower() == "bestaand":
+
+        cursor.execute("SELECT moderatorid FROM moderator WHERE email = %s", [email])
+        info = cursor.fetchone()
+
+        # Checken of de moderator ook echt bestaat
+        if not info:
+            print("Email bestaat niet")
+            return
+
+        moderatorId = info[0]
+
+    # Als de moderator nog niet bestaat
+    if acc.lower() == "nieuw":
 
         cursor.execute("SELECT naam FROM moderator WHERE email = %s", [email])
         info = cursor.fetchone()
 
-        # Checkt of de naam en de email bij elkaar kloppen
-        if not info or naam == info[0]:
-            break
-        print("Naam/Email incorrect")
+        # Checken of de moderator al bestaat
+        if info:
+            print("Email bestaat al")
+            return
 
-    # Inserts moderator in de database als de email nog niet bestaat
-    cursor.execute("INSERT INTO moderator(naam, email) VALUES(%s,%s) ON CONFLICT DO NOTHING", [naam, email])
-    cursor.execute("SELECT moderatorid FROM moderator WHERE email = %s", [email])
-    moderatorId = cursor.fetchone()[0]
+        cursor.execute("INSERT INTO moderator(naam, email) VALUES(%s,%s)", [naam, email])
+        cursor.execute("SELECT moderatorid FROM moderator WHERE email = %s", [email])
+        moderatorId = cursor.fetchone()[0]
 
+    # Zet alle berichten uit de CSV in een list
     with open("zuil.csv", "r") as file:
         reader = csv.reader(file)
         lines = []
@@ -84,3 +101,6 @@ def moderatie():
 
 
     connection.commit()
+
+
+moderatie()

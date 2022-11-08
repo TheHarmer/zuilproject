@@ -6,7 +6,7 @@ import csv
 def zuil():
 
     # Naam vragen, anoniem als het leeg is
-    naam = input("Wat is uw naam: ").strip()
+    naam = input("Wat is uw naam (laat leeg voor anoniem): ").strip()
     if not naam:
         naam = "Anoniem"
 
@@ -25,3 +25,6 @@ def zuil():
     with open("zuil.csv", "a", newline='') as file:
         writer = csv.writer(file)
         writer.writerow([datetime.now().strftime('%d/%m/%Y'),datetime.now().strftime('%H:%M:%S'),station,naam,bericht])
+
+
+zuil()
