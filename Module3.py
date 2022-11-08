@@ -135,6 +135,8 @@ weerframe.pack(pady=(40,15), padx=15, anchor='w')
 
 # Grid voor het bericht
 frame = Frame(window)
+
+# De stations in het grid
 station0 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", width=12, height=5)
 station1 = Label(frame, borderwidth=1, relief="solid", height=5)
 station2 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", height=5)
@@ -146,6 +148,7 @@ station2.grid(row=2, column=0, sticky="NESW")
 station3.grid(row=3, column=0, sticky="NESW")
 station4.grid(row=4, column=0, sticky="NESW")
 
+# Het bericht in het frame
 bericht0 = Label(frame, borderwidth=1, relief="solid", bg="lightgray", width=130)
 bericht1 = Label(frame, borderwidth=1, relief="solid")
 bericht2 = Label(frame, borderwidth=1, relief="solid", bg="lightgray")
@@ -157,6 +160,7 @@ bericht2.grid(row=2, column=1, sticky="NESW")
 bericht3.grid(row=3, column=1, sticky="NESW")
 bericht4.grid(row=4, column=1, sticky="NESW")
 
+# De faciliteiten in de frame
 faciliteiten0 = Frame(frame, borderwidth=1, relief="solid", bg="lightgray")
 faciliteiten0_0 = Label(faciliteiten0, bg="lightgray", width=4)
 faciliteiten0_1 = Label(faciliteiten0, bg="lightgray", width=4)
@@ -167,6 +171,7 @@ faciliteiten0_1.grid(row=0, column=1, sticky="NESW")
 faciliteiten0_2.grid(row=1, column=0, sticky="NESW")
 faciliteiten0_3.grid(row=1, column=1, sticky="NESW")
 
+# Al deze blokjes zijn een grid in het hoofd grid voor de faciliteiten
 faciliteiten1 = Frame(frame, borderwidth=1, relief="solid")
 faciliteiten1_0 = Label(faciliteiten1, width=5)
 faciliteiten1_1 = Label(faciliteiten1, width=5)
