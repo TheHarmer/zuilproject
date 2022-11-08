@@ -17,7 +17,7 @@ def moderatie():
 
     # Vragen of het een nieuwe of bestaande moderator is
     acc = input("Nieuw of bestaande moderator? ")
-    print(acc == "bestaand")
+
     if acc.lower() != "bestaand" and acc.lower() != "nieuw":
         print("Ongeldige input")
         return
