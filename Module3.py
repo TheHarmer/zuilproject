@@ -100,9 +100,9 @@ def select(option):
             faciliteiten4_3.configure(image=img3, width=35)
 
 
-    temp['text'] = f"{round(weer['main']['temp'],1)}°C"
-    humid['text'] = f"humidity: {weer['main']['humidity']}%"
-    wind['text'] = f"wind speed: {weer['wind']['speed']}km"
+    temp['text'] = f"Temperature: {round(weer['main']['temp'],1)}°C"
+    humid['text'] = f"Humidity: {weer['main']['humidity']}%"
+    wind['text'] = f"Wind speed: {weer['wind']['speed']}km"
 
 
 # Window aanmaken
